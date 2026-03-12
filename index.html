@@ -34,12 +34,22 @@
       return `${display}:00 ${suffix}`;
     }
 
+    function toPeruDate(date) {
+      // Peru is UTC-5
+      const peru = new Date(date.getTime() - 5 * 60 * 60 * 1000);
+      return peru.toISOString().split("T")[0];
+    }
+
+    function todayPeru() {
+      return toPeruDate(new Date());
+    }
+
     function getNext8Days() {
       const days = [];
       for (let i = 0; i < 8; i++) {
         const d = new Date();
         d.setDate(d.getDate() + i);
-        days.push(d.toISOString().split("T")[0]);
+        days.push(toPeruDate(d));
       }
       return days;
     }
@@ -51,7 +61,7 @@
     }
 
     function isToday(dateStr) {
-      return dateStr === new Date().toISOString().split("T")[0];
+      return dateStr === todayPeru();
     }
 
     function getPrecio(hour) {
@@ -59,7 +69,7 @@
     }
 
     let reservas = {};
-    let selectedDate = new Date().toISOString().split("T")[0];
+    let selectedDate = todayPeru();
     const days = getNext8Days();
 
     function renderDayTabs() {
